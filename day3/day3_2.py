@@ -31,8 +31,11 @@ def get_manhattan_distance(point_1, point_2):
 def get_path_distance(edge_list, point):
     distance = 0
     for edge in edge_list:
+        print(edge)
         if edge[0][0] == edge[1][0]:
-            if point[0] == edge[0][0]:
+            if (point[0] == edge[0][0]
+                 and point[1] > min(edge[0][1], edge[1][1])
+                 and point[1] < max(edge[0][1], edge[1][1])):
                 distance += abs(edge[0][1] - point[1])
                 break
 
@@ -40,7 +43,9 @@ def get_path_distance(edge_list, point):
 
 
         elif edge[0][1] == edge[1][1]:
-            if point[1] == edge[0][1]:
+            if (point[1] == edge[0][1]
+                 and point[0] > min(edge[0][0], edge[1][0])
+                 and point[0] < max(edge[0][0], edge[1][0])):
                 distance += abs(edge[0][0] - point[0])
                 break
 
@@ -81,13 +86,13 @@ for edge_1 in edge_list_1:
 
 
 shortest_distance = None
+shortest_intersection = None
 for intersection in intersection_list:
-    curr_distance = (get_path_distance(edge_list_1, intersection) +
-            get_path_distance(edge_list_2, intersection))
-
+    curr_distance = (abs(get_path_distance(edge_list_1, intersection)) +
+            abs(get_path_distance(edge_list_2, intersection)))
     if shortest_distance is None or curr_distance < shortest_distance:
         shortest_distance = curr_distance
+        shortest_intersection = intersection
 
-print(edge_list_1)
-print(edge_list_2)
 print(shortest_distance)
+print(shortest_intersection)
